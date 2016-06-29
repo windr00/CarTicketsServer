@@ -30,15 +30,18 @@ public class Servlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            response.setContentType("text/html");
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("text/html;charset=UTF-8");
             PrintWriter out = response.getWriter();
             String sql = request.getParameter("sql");
+            System.out.println(sql);
             String ret = null;
             if (sql.startsWith("select")) {
                 ret = execSelect(sql);
             } else {
                 ret = String.valueOf(execRUD(sql));
             }
+            System.out.println(ret);
             out.println(ret);
         } catch (Exception e) {
             response.getWriter().println("Invalid Parameters</br>");

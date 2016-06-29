@@ -22,7 +22,11 @@ public class JsonUtil {
             for (DataColumn column :
                     row.GetColumn()) {
 
-                obj.put(column.GetKey(), column.GetValue());
+                if (column.GetKey().contains("date")) {
+                    obj.put(column.GetKey(), column.GetValue().toString());
+                } else {
+                    obj.put(column.GetKey(), column.GetValue());
+                }
             }
             array.add(obj);
         }
