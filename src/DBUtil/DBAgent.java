@@ -52,13 +52,9 @@ public class DBAgent {
 
         DataTable dt = null;
 
-        PreparedStatement ps = _CONN.prepareStatement(sSQL);
-        if (objParams != null) {
-            for (int i = 0; i < objParams.length; i++) {
-                ps.setObject(i + 1, objParams[i]);
-            }
-        }
-        ResultSet rs = ps.executeQuery();
+        Statement ps = _CONN.createStatement();
+
+        ResultSet rs = ps.executeQuery(sSQL);
         ResultSetMetaData rsmd = rs.getMetaData();
 
         List<DataRow> row = new ArrayList<DataRow>(); //表所有行集合
@@ -92,12 +88,9 @@ public class DBAgent {
 
     public static boolean RUD(String sSQL) throws Exception {
         GetConn(user, pwd);
-        boolean result = false;
 
-        PreparedStatement ps = _CONN.prepareStatement(sSQL);
-        result = ps.execute();
-
-        return !result;
+        Statement state = _CONN.createStatement();
+        return !state.execute(sSQL);
     }
 
 
