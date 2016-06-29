@@ -7,10 +7,11 @@ package DBUtil;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 public class DBAgent {
     static Connection _CONN = null;
-
+    static Semaphore sem = new Semaphore(1);
     private static String user;
     private static String pwd;
 
@@ -45,7 +46,6 @@ public class DBAgent {
             _CONN = null;
         }
     }
-
 
     public static DataTable GetDataTable(String sSQL, Object... objParams) throws Exception {
         GetConn(user, pwd);
@@ -85,12 +85,13 @@ public class DBAgent {
         return dt;
     }
 
-
     public static boolean RUD(String sSQL) throws Exception {
         GetConn(user, pwd);
-
+        sem.acquire();
         Statement state = _CONN.createStatement();
-        return !state.execute(sSQL);
+        boolean ret = state.executeUpdate(sSQL) != 0;
+        sem.release();
+        return ret;
     }
 
 
